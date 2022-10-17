@@ -1,132 +1,172 @@
 import { useEffect, useState } from "react";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faArrowUp } from "@fortawesome/free-solid-svg-icons";
 import axios from 'axios'
+
 function App() {
     const [singers, setSingers] = useState([])
     const [years, setYears] = useState([])
     const [genres, setGenres] = useState([])
     const [musics, setMusics] = useState([])
+    const [filters, setFilters] = useState([])
+    const [selected, setSelected] = useState(false)
+    const [issorted, setIsSorted] = useState("id")
+    const columns = ["id", "singer", "music", "genre", "year" ]
     const pagination = [1,2,3,4,5]
-    const [selected, setSelected] = useState(1)
-    let paginationSize = 5
-    let begin = ((selected-1)*paginationSize)+1
-    let end = begin+paginationSize
+
+    const delete_cookie =(name) =>  {
+        document.cookie = name + '=;expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+    };
+
   
     const fetchMusics = async () => {
-      try{
-        const res = await axios(`http://localhost:8080`)
+      try{  
+        axios.defaults.withCredentials = true
+        const res = await axios.get(`http://localhost:8080/`)
         setMusics(res.data)
+        console.log(res.data)
       }
       catch{
         console.log("error")
       }
     };
 
-    const fetchGenres = async () => {
-        try{
-          const res = await axios(`http://localhost:8080/genres`)
-          setGenres(res.data)
-        }
-        catch{
-          console.log("error")
-        }
-      };
 
-      const fetchSingers = async () => {
-        try{
-          const res = await axios(`http://localhost:8080/singers`)
-          setSingers(res.data)
-        }
-        catch{
-          console.log("error")
-        }
-      };
+    const fetchFilters = async() => {
+        try{  
+            axios.defaults.withCredentials = true
+            const res = await axios.get(`http://localhost:8080/filters`)
+            setFilters(res.data)
+            setSingers(res.data.singer)
+            setGenres(res.data.genres);
+            setYears(res.data.year)
+            console.log(res.data)
+          }
+          catch{
+            console.log("error")
+          }
+    }
 
-      const fetchYears = async () => {
-        try{
-          const res = await axios(`http://localhost:8080/years`)
-          setYears(res.data)
-        }
-        catch{
-          console.log("error")
-        }
-      };
 
-  useEffect(() => {
+
+  const handleClick = (e, num) => {
+   setSelected(num)
+    document.cookie=`page=${e.target.outerText}`
     fetchMusics();
-    fetchGenres();
-    fetchSingers();
-    fetchYears();
-  },[])
-  const handleClick = (e) => {
-    setSelected(e.target.outerText)
   }
 
+
+
+  const handleSort = (sortby) => {
+    if(issorted==sortby){
+        if(document.cookie.indexOf('sortbyDesc=')!=-1){
+        delete_cookie("sortbyDesc")
+    }
+    document.cookie=`sortbyAsc=${sortby}`
+    fetchMusics()
+    setIsSorted(false)
+    }
+    else{
+        if(document.cookie.indexOf('sortbyAsc=')!=-1){
+            delete_cookie("sortbyAsc")
+        }
+        document.cookie=`sortbyDesc=${sortby}`
+        fetchMusics()
+        setIsSorted(sortby)
+    }
+}
+
+
+  const handleChange =(e, filterName) => {
+    if(filterName == "singer"){
+        if(e.target.value == "all"){
+            delete_cookie("singer")
+            fetchMusics()
+        }
+        else{
+            document.cookie=`singer=${e.target.value}`
+            fetchMusics()
+        }
+    }
+    if(filterName=="genre"){
+        if(e.target.value == "all"){
+            delete_cookie("genre")
+            fetchMusics()
+        }
+        else{
+            document.cookie=`genre=${e.target.value}`
+            fetchMusics()
+        }
+    }
+    if(filterName=="year"){
+        if(e.target.value == "all"){
+            delete_cookie("year")
+            fetchMusics()
+        }
+        else{
+            document.cookie=`year=${e.target.value}`
+            fetchMusics()
+        }
+        }
+  }
+
+
+  useEffect(() => {
+    delete_cookie("page")
+    delete_cookie("genre")
+    delete_cookie("year")
+    delete_cookie("singer")
+    delete_cookie("sortbyAsc")
+    delete_cookie("sortbyDesc")
+    fetchMusics();
+    fetchFilters();
+  },[])
+
+  
   return (
     <div className="flex flex-col">
         <div className="flex space-x-10 m-10">
-        <select className="w-40 h-10 border-2 border-gray-200 bg-gray-50">
-            <option>All</option>
+        <select className="w-40 h-10 border-2 border-gray-200 bg-gray-50" onChange={(e)=>handleChange(e, "singer")}>
+            <option value="all">All</option>
             {singers.map((singer) => (
-                <option key={singer.singer}>{singer.singer}</option>
+                <option value={singer.id} key={singer.id}>{singer.name}</option>
             ))}
         </select>
 
-        <select className="w-40 h-10 border-2 border-gray-200 bg-gray-50">
-            <option>All</option>
+        <select className="w-40 h-10 border-2 border-gray-200 bg-gray-50" onChange={(e)=>handleChange(e, "genre")}>
+            <option value="all">All</option>
             {genres.map((genre) => (
-                <option key={genre.genre}>{genre.genre}</option>
+                <option value={genre.id} key={genre.id}>{genre.name}</option>
             ))}
         </select>
 
-        <select className="w-40 h-10 border-2 border-gray-200 bg-gray-50">
-            <option>All</option>
+        <select className="w-40 h-10 border-2 border-gray-200 bg-gray-50" onChange={(e)=>handleChange(e, "year")}>
+            <option value="all">All</option>
             {years.map((year) => (
-                <option key={year.year}>{year.year}</option>
+                <option value={year} key={year}>{year}</option>
             ))}
         </select>
-
         </div>
-        
     <div className="overflow-x-auto">
         <div className="p-1.5 w-full inline-block align-middle">
             <div className="overflow-hidden border rounded-lg">
                 <table className="min-w-full divide-y divide-gray-200">
                     <thead className="bg-gray-50">
                         <tr>
-                            <th
+                            {columns.map((column) =>(
+                                <th
+                                key={column}
                                 scope="col"
-                                className="px-6 py-3 text-xs font-bold text-left text-gray-500 uppercase "
+                                className="px-6 py-3 text-xs font-bold text-left text-gray-500 " onClick={() => handleSort(column)}
                             >
-                                ID
+                                {column}
+                                <FontAwesomeIcon className={`ml-2 ${issorted==column  ? "rotate-180" : "rotate-0" }`} icon={faArrowUp} />
                             </th>
-                            <th
-                                scope="col"
-                                className="px-6 py-3 text-xs font-bold text-left text-gray-500"
-                            >
-                                singer
-                            </th>
-                            <th
-                                scope="col"
-                                className="px-6 py-3 text-xs font-bold text-left text-gray-500 uppercase "
-                            >
-                               Name
-                            </th>
-                            <th
-                                scope="col"
-                                className="px-6 py-3 text-xs font-bold text-left text-gray-500 uppercase "
-                            >
-                               Genre
-                            </th>
-                            <th
-                                scope="col"
-                                className="px-6 py-3 text-xs font-bold text-left text-gray-500 uppercase "
-                            >
-                               Year
-                            </th>
+                            ) )}
                         </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-200">
-                      {musics.slice(begin-1, end-1).map((music) => (
+                      {musics.map((music) => (
                          <tr key={music.id}>
                          <td className="px-6 py-4 text-sm font-medium text-gray-800 whitespace-nowrap">
                              {music.id}
@@ -150,8 +190,8 @@ function App() {
                 </table>
             </div>
             <div className="mt-4 flex space-x-2 justify-center">
-               {pagination.map((num) => (
-                <div className="w-10 h-10 border-2 border-gray-200 bg-gray-50 flex justify-center items-center" onClick={(e)=> handleClick(e)}>{num}</div>
+               {pagination.map((num ,index) => (
+                <div key={index} className={`w-10 h-10 border-2 border-gray-200 flex justify-center items-center `} style={{ backgroundColor: selected==num ? "red" : "gray"}} onClick={(e)=> handleClick(e, num)}>{num}</div>
                ))}
                </div>
         </div>
