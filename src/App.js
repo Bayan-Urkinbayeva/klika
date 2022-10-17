@@ -11,7 +11,7 @@ function App() {
     const [filters, setFilters] = useState([])
     const [selected, setSelected] = useState(false)
     const [issorted, setIsSorted] = useState("id")
-    const columns = ["id", "singer", "music", "genre", "year" ]
+    const columns = ["id", "singer", "name", "genre", "year" ]
     const pagination = [1,2,3,4,5]
 
     const delete_cookie =(name) =>  {
@@ -59,18 +59,14 @@ function App() {
 
   const handleSort = (sortby) => {
     if(issorted==sortby){
-        if(document.cookie.indexOf('sortbyDesc=')!=-1){
-        delete_cookie("sortbyDesc")
-    }
-    document.cookie=`sortbyAsc=${sortby}`
+    document.cookie=`column=${sortby}`
+    document.cookie=`order=asc`
     fetchMusics()
     setIsSorted(false)
     }
     else{
-        if(document.cookie.indexOf('sortbyAsc=')!=-1){
-            delete_cookie("sortbyAsc")
-        }
-        document.cookie=`sortbyDesc=${sortby}`
+        document.cookie=`column=${sortby}`
+        document.cookie=`order=desc`
         fetchMusics()
         setIsSorted(sortby)
     }
@@ -116,13 +112,13 @@ function App() {
     delete_cookie("genre")
     delete_cookie("year")
     delete_cookie("singer")
-    delete_cookie("sortbyAsc")
-    delete_cookie("sortbyDesc")
+    delete_cookie("column")
+    delete_cookie("order")
     fetchMusics();
     fetchFilters();
   },[])
 
-  
+
   return (
     <div className="flex flex-col">
         <div className="flex space-x-10 m-10">
@@ -191,7 +187,7 @@ function App() {
             </div>
             <div className="mt-4 flex space-x-2 justify-center">
                {pagination.map((num ,index) => (
-                <div key={index} className={`w-10 h-10 border-2 border-gray-200 flex justify-center items-center `} style={{ backgroundColor: selected==num ? "red" : "gray"}} onClick={(e)=> handleClick(e, num)}>{num}</div>
+                <div key={index} className={`w-10 h-10 border-2 border-gray-200 flex justify-center items-center `} style={{ backgroundColor: selected==num ? "#a7a8a7" : "transparent"}} onClick={(e)=> handleClick(e, num)}>{num}</div>
                ))}
                </div>
         </div>
