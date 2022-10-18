@@ -22,7 +22,7 @@ function App() {
     const fetchMusics = async () => {
       try{  
         axios.defaults.withCredentials = true
-        const res = await axios.get(`http://localhost:8080/`)
+        const res = await axios.get(`https://klika-backend.herokuapp.com/`)
         setMusics(res.data)
         console.log(res.data)
       }
@@ -35,7 +35,7 @@ function App() {
     const fetchFilters = async() => {
         try{  
             axios.defaults.withCredentials = true
-            const res = await axios.get(`http://localhost:8080/filters`)
+            const res = await axios.get(`https://klika-backend.herokuapp.com/filters`)
             setFilters(res.data)
             setSingers(res.data.singer)
             setGenres(res.data.genres);
@@ -51,7 +51,7 @@ function App() {
 
   const handleClick = (e, num) => {
    setSelected(num)
-    document.cookie=`page=${e.target.outerText}`
+    document.cookie=`page=${e.target.outerText};Domain=herokuapp.com`
     fetchMusics();
   }
 
@@ -59,14 +59,14 @@ function App() {
 
   const handleSort = (sortby) => {
     if(issorted==sortby){
-    document.cookie=`column=${sortby}`
-    document.cookie=`order=asc`
+    document.cookie=`column=${sortby}; Domain=herokuapp.com`
+    document.cookie=`order=asc; Domain=herokuapp.com`
     fetchMusics()
     setIsSorted(false)
     }
     else{
-        document.cookie=`column=${sortby}`
-        document.cookie=`order=desc`
+        document.cookie=`column=${sortby}; Domain=herokuapp.com`
+        document.cookie=`order=desc;domain=herokuapp.com`
         fetchMusics()
         setIsSorted(sortby)
     }
@@ -80,7 +80,7 @@ function App() {
             fetchMusics()
         }
         else{
-            document.cookie=`singer=${e.target.value}`
+            document.cookie=`singer=${e.target.value}; Domain=herokuapp.com`
             fetchMusics()
         }
     }
@@ -90,7 +90,7 @@ function App() {
             fetchMusics()
         }
         else{
-            document.cookie=`genre=${e.target.value}`
+            document.cookie=`genre=${e.target.value}; Domain=herokuapp.com`
             fetchMusics()
         }
     }
@@ -100,7 +100,7 @@ function App() {
             fetchMusics()
         }
         else{
-            document.cookie=`year=${e.target.value}`
+            document.cookie=`year=${e.target.value}; Domain=herokuapp.com`
             fetchMusics()
         }
         }
