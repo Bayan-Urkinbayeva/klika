@@ -22,7 +22,13 @@ function App() {
     const fetchMusics = async () => {
       try{  
         axios.defaults.withCredentials = true
-        const res = await axios.get(`https://klika-backend.herokuapp.com/`)
+        const res = await axios.get(`https://klika-backend.herokuapp.com/`,
+        {
+            sameSite : "none",
+            secure: true,
+            domain: "kilka-front.herokuapp.com",
+            httpOnly: true
+        })
         setMusics(res.data)
         console.log(res.data)
       }
@@ -51,7 +57,7 @@ function App() {
 
   const handleClick = (e, num) => {
    setSelected(num)
-    document.cookie=`page=${e.target.outerText};Domain=localhost.com`
+    document.cookie=`page=${e.target.outerText}`
     fetchMusics();
   }
 
@@ -66,7 +72,7 @@ function App() {
     }
     else{
         document.cookie=`column=${sortby};`
-        document.cookie=`order=desc;domain=localhost.com`
+        document.cookie=`order=desc`
         fetchMusics()
         setIsSorted(sortby)
     }
