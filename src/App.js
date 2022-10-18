@@ -22,7 +22,7 @@ function App() {
     const fetchMusics = async () => {
       try{  
         axios.defaults.withCredentials = true
-        const res = await axios.get(`https://klika-backend.herokuapp.com/`,
+        const res = await axios.get(`http://localhost:8080/`,
         {
             sameSite : "none",
             secure: true,
@@ -41,7 +41,7 @@ function App() {
     const fetchFilters = async() => {
         try{  
             axios.defaults.withCredentials = true
-            const res = await axios.get(`https://klika-backend.herokuapp.com/filters`)
+            const res = await axios.get(`http://localhost:8080/filters`)
             setFilters(res.data)
             setSingers(res.data.singer)
             setGenres(res.data.genres);
@@ -57,7 +57,7 @@ function App() {
 
   const handleClick = (e, num) => {
    setSelected(num)
-    document.cookie=`page=${e.target.outerText};domain=kilka-front.herokuapp.com/`
+    document.cookie=`page=${e.target.outerText};`
     fetchMusics();
   }
 
@@ -65,14 +65,14 @@ function App() {
 
   const handleSort = (sortby) => {
     if(issorted==sortby){
-    document.cookie=`column=${sortby};domain=kilka-front.herokuapp.com/`
+    document.cookie=`column=${sortby};`
     document.cookie=`order=asc;`
     fetchMusics()
     setIsSorted(false)
     }
     else{
-        document.cookie=`column=${sortby};domain=kilka-front.herokuapp.com/`
-        document.cookie=`order=desc;domain=kilka-front.herokuapp.com/`
+        document.cookie=`column=${sortby};`
+        document.cookie=`order=desc;`
         fetchMusics()
         setIsSorted(sortby)
     }
@@ -86,7 +86,7 @@ function App() {
             fetchMusics()
         }
         else{
-            document.cookie=`singer=${e.target.value};domain=kilka-front.herokuapp.com/`
+            document.cookie=`singer=${e.target.value};`
             fetchMusics()
         }
     }
@@ -96,7 +96,7 @@ function App() {
             fetchMusics()
         }
         else{
-            document.cookie=`genre=${e.target.value};domain=kilka-front.herokuapp.com/`
+            document.cookie=`genre=${e.target.value};`
             fetchMusics()
         }
     }
@@ -106,7 +106,7 @@ function App() {
             fetchMusics()
         }
         else{
-            document.cookie=`year=${e.target.value};domain=kilka-front.herokuapp.com/`
+            document.cookie=`year=${e.target.value};`
             fetchMusics()
         }
         }
