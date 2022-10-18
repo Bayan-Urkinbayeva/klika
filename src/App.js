@@ -51,7 +51,7 @@ function App() {
 
   const handleClick = (e, num) => {
    setSelected(num)
-    document.cookie=`page=${e.target.outerText};Domain=herokuapp.com`
+    document.cookie=`page=${e.target.outerText};Domain=localhost.com`
     fetchMusics();
   }
 
@@ -59,14 +59,14 @@ function App() {
 
   const handleSort = (sortby) => {
     if(issorted==sortby){
-    document.cookie=`column=${sortby}; Domain=herokuapp.com`
-    document.cookie=`order=asc; Domain=herokuapp.com`
+    document.cookie=`column=${sortby};`
+    document.cookie=`order=asc;`
     fetchMusics()
     setIsSorted(false)
     }
     else{
-        document.cookie=`column=${sortby}; Domain=herokuapp.com`
-        document.cookie=`order=desc;domain=herokuapp.com`
+        document.cookie=`column=${sortby};`
+        document.cookie=`order=desc;domain=localhost.com`
         fetchMusics()
         setIsSorted(sortby)
     }
@@ -80,7 +80,7 @@ function App() {
             fetchMusics()
         }
         else{
-            document.cookie=`singer=${e.target.value}; Domain=herokuapp.com`
+            document.cookie=`singer=${e.target.value};`
             fetchMusics()
         }
     }
@@ -90,7 +90,7 @@ function App() {
             fetchMusics()
         }
         else{
-            document.cookie=`genre=${e.target.value}; Domain=herokuapp.com`
+            document.cookie=`genre=${e.target.value};`
             fetchMusics()
         }
     }
@@ -100,7 +100,7 @@ function App() {
             fetchMusics()
         }
         else{
-            document.cookie=`year=${e.target.value}; Domain=herokuapp.com`
+            document.cookie=`year=${e.target.value};`
             fetchMusics()
         }
         }
