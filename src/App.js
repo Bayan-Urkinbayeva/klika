@@ -57,7 +57,7 @@ function App() {
 
   const handleClick = (e, num) => {
    setSelected(num)
-    document.cookie=`page=${e.target.outerText}`
+    document.cookie=`page=${e.target.outerText};domain="kilka-front.herokuapp.com"`
     fetchMusics();
   }
 
@@ -65,14 +65,14 @@ function App() {
 
   const handleSort = (sortby) => {
     if(issorted==sortby){
-    document.cookie=`column=${sortby};`
+    document.cookie=`column=${sortby};domain="kilka-front.herokuapp.com"`
     document.cookie=`order=asc;`
     fetchMusics()
     setIsSorted(false)
     }
     else{
-        document.cookie=`column=${sortby};`
-        document.cookie=`order=desc`
+        document.cookie=`column=${sortby};domain="kilka-front.herokuapp.com"`
+        document.cookie=`order=desc;domain="kilka-front.herokuapp.com"`
         fetchMusics()
         setIsSorted(sortby)
     }
@@ -86,7 +86,7 @@ function App() {
             fetchMusics()
         }
         else{
-            document.cookie=`singer=${e.target.value};`
+            document.cookie=`singer=${e.target.value};domain="kilka-front.herokuapp.com"`
             fetchMusics()
         }
     }
@@ -96,7 +96,7 @@ function App() {
             fetchMusics()
         }
         else{
-            document.cookie=`genre=${e.target.value};`
+            document.cookie=`genre=${e.target.value};domain="kilka-front.herokuapp.com"`
             fetchMusics()
         }
     }
@@ -106,7 +106,7 @@ function App() {
             fetchMusics()
         }
         else{
-            document.cookie=`year=${e.target.value};`
+            document.cookie=`year=${e.target.value};domain="kilka-front.herokuapp.com"`
             fetchMusics()
         }
         }
