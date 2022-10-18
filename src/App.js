@@ -26,7 +26,7 @@ function App() {
         {
             sameSite : "none",
             secure: true,
-            domain: "kilka-front.herokuapp.com",
+            domain: "herokuapp.com",
             httpOnly: true
         })
         setMusics(res.data)
